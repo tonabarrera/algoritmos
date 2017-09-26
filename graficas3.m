@@ -1,0 +1,24 @@
+x = linspace(1, 1000, 1000);
+%constante = 1;
+%logaritmo = log(x);
+%lineal = x;
+%nlogn = x.*log(x);
+%cuadratica = x.^2;
+cubica = x.^3;
+exponencial = 2.^x;
+%fact = factorial(x);
+figure;
+%plot(x, ones(size(x))*1, 'LineWidth', 2);
+%plot(x, logaritmo, 'LineWidth', 2);
+%plot(x, lineal, 'LineWidth', 2);
+%plot(x, nlogn, 'LineWidth', 2);
+%plot(x, cuadratica, 'LineWidth', 2);
+plot(x, cubica, 'LineWidth', 2);
+hold
+plot(x, exponencial, 'LineWidth', 2);
+%plot(x, fact, 'LineWidth', 2);
+grid;
+xlabel('n');
+ylabel('O(f(n))');
+legend('Cuadrática', 'Exponencial');
+title('Comparación de complejidades');
