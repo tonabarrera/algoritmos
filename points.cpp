@@ -5,13 +5,14 @@
 #include <iostream>
 #include <sstream>
 using namespace std;
+
 struct Punto {
     double x;
     double y;
 };
 
 double encontrar_cercano(Punto [], int, int);
-double encontrar_cercano_mitad(Punto [], int, int);
+double encontrar_cercano_mitad(Punto [], int, double);
 double min(double, double);
 double distancia(Punto, Punto);
 int compararX (const void *, const void *);
@@ -42,7 +43,7 @@ int main(int argc, char const *argv[]) {
     qsort(puntos, n, sizeof(Punto), compararX);
 
     double punto_cercano = encontrar_cercano(puntos, 0, n-1);
-    printf("%.3lf", punto_cercano);
+    printf("%.3f", punto_cercano);
     return 0;
 }
 
@@ -59,11 +60,10 @@ double cercano(Punto P[], int inicio, int fin) {
 }
 
 double encontrar_cercano(Punto puntos[], int inicio, int fin) {
-    if ((fin - inicio) <=3)
+    if ((fin - inicio) <3)
         return cercano(puntos, inicio, fin);
     int mitad = (fin + inicio)/2;
     Punto punto_medio = puntos[mitad];
-
 
     double cercano_izq = encontrar_cercano(puntos, inicio, mitad);
     double cercano_der = encontrar_cercano(puntos, mitad+1, fin);
@@ -78,13 +78,13 @@ double encontrar_cercano(Punto puntos[], int inicio, int fin) {
     // Ordenar y
     qsort(puntos_mitad, j, sizeof(Punto), compararY);
 
-    double minimo_mitad = encontrar_cercano_mitad(puntos_mitad, j, minimo);
-    return minimo_mitad;
+    minimo = encontrar_cercano_mitad(puntos_mitad, j, minimo);
+    return minimo;
 }
 
-double encontrar_cercano_mitad(Punto puntos[], int fin, int min) {
+double encontrar_cercano_mitad(Punto puntos[], int fin, double min) {
     for (int i = 0; i < fin; i++)
-        for (int j=i+1; j <= fin && (puntos[j].y - puntos[i].y) < min; j++)
+        for (int j=i+1; j < fin && (puntos[j].y - puntos[i].y) < min; j++)
             if (distancia(puntos[i], puntos[j]) < min )
                 min = distancia(puntos[i], puntos[j]);
 
