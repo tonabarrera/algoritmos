@@ -4,10 +4,12 @@
 #include <sstream>
 using namespace std;
 
+// Funciones que se utilizan en este programa
 long int sumar_mitad(int *, long int, long int, long int);
 long int maximo(long int, long int, long int);
 long int maximo_sub_array(int *, long int, long int);
- 
+
+/*Funcion principal que captura los datos de entrada*/
 int main(int argc, char const *argv[]) {
     int inicio = 0;
     int n;
@@ -28,6 +30,7 @@ int main(int argc, char const *argv[]) {
     return 0;
 }
 
+/*Encuentra el mayor de tres numeros*/
 long int maximo(long int a, long int b, long int c) {
     if (a > b)
         if (a > c)
@@ -40,6 +43,9 @@ long int maximo(long int a, long int b, long int c) {
         return c;        
 }
 
+/*Funcion que busca de manera recursiva la maxima
+* suma entre un arreglo de numeros, recibe el inicio
+* del arreglo y el final de este, devuelve la suma maxima*/
 long int maximo_sub_array(int *arreglo, long int inicio, long int final) {
     if (inicio == final)
         return arreglo[inicio];
@@ -53,6 +59,8 @@ long int maximo_sub_array(int *arreglo, long int inicio, long int final) {
     }
 }
 
+/*Encuentra la suma entre la mitad izquierda y la derecha
+* de un arreglo con ayuda de su inicio, mitad y el final*/
 long int sumar_mitad(int *arreglo, long int inicio, long int mitad, long int final) {
     long int suma_izq = arreglo[mitad];
     long int suma_max_izq = arreglo[mitad];

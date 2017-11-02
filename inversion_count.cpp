@@ -1,28 +1,33 @@
-#include <iostream>
-using namespace std;
+#include <stdio.h>
+#include <stdlib.h>
 
-struct Nodo {
-    long int valor;
-    struct Nodo *izq;
-    struct Nodo *der;
-    long long int hijos;
-};
+/*Definicion de funciones auxiliares*/
+long long merge_sort(long *, long, long);
+long long merge(long *, long, long, long);
 
-void insertar(struct Nodo **, long int);
-void crear_arbol(struct Nodo **, long int);
+/*Caputra los elementos de cada caso de prueba*/
+long long obtener_inversiones() {
+    long n;
+    scanf("%ld", &n);
+    long dato;
+    long *arreglo = (long*)malloc(sizeof(long)*n);
+    for (long i = 0; i < n; i++) {
+        scanf("%ld", &dato);
+        arreglo[i] = dato;
+    }
 
-long long int numero_inversiones = 0;
+    return merge_sort(arreglo, 0, n-1);
+}
 
-long long int obtener_inversiones();
-
-int main() {
+/*Funcion principal para capturar los datos y mostar los resultados*/
+int main(void){
     int pruebas;
     int i;
     scanf("%d", &pruebas);
-    //printf("\n");
     char c;
     scanf("%c", &c);
-    long long int resultados[pruebas];
+    long long resultados[pruebas];
+
     for (i = 0; i < pruebas; i++) {
         resultados[i] = obtener_inversiones();
         scanf("%c", &c);
@@ -30,41 +35,54 @@ int main() {
     scanf("%c", &c);
     for (i = 0; i < pruebas; i++)
         printf("%lld\n", resultados[i]);
+
+    
     return 0;
 }
 
-long long int obtener_inversiones() {
-    numero_inversiones = 0;
-    long int n;
-    scanf("%ld", &n);
-    long int dato;
-    struct Nodo *arbol = NULL;
-    for (long int i = 0; i < n; i++) {
-        scanf("%ld", &dato);
-        insertar(&arbol, dato);
+/*Funcion que se encarga de dividir el array de numeros
+* y obtener el total de inversiones*/
+long long merge_sort(long *arreglo, long inicio, long fin) {
+    long long total = 0;
+    if (inicio < fin) {
+        long mitad = (inicio + fin) / 2;
+        total += merge_sort(arreglo, inicio, mitad);
+        total += merge_sort(arreglo, mitad+1, fin);
+        total += merge(arreglo, inicio, mitad, fin);
     }
-    return numero_inversiones;
+    return total;
 }
 
-
-void insertar(struct Nodo **arbol, long int dato) {
-    if (*arbol == NULL) {
-        crear_arbol(arbol, dato);
-    } else if (dato <= ((*arbol)->valor)){
-        ++numero_inversiones;
-        numero_inversiones += (*arbol)->hijos;
-        insertar(&((*arbol)->izq), dato);
-    } else{
-        insertar(&((*arbol)->der), dato);
-        (*arbol)->hijos = (*arbol)->hijos + 1;
+/*Funcion que cuenta el total de inversiones con base al algoritmo de
+* ordenamiento merge-sort*/
+long long merge(long *arreglo, long inicio, long mitad, long fin) {
+    long n = mitad - inicio;
+    long n2 = fin - mitad;
+    long izq[n];
+    long der[n2];
+    for (long i=0; i<=n; i++){
+        izq[i] = arreglo[inicio+i];
     }
-}
-
-void crear_arbol(struct Nodo **nuevo, long int dato) {
-    (*nuevo) = (struct Nodo*)malloc(sizeof(struct Nodo));
-
-    (*nuevo)->izq = NULL;
-    (*nuevo)->der = NULL;
-    (*nuevo)->hijos = 0;
-    (*nuevo)->valor = dato;
+    for (long i=0; i<n2; i++){
+        der[i] = arreglo[mitad+i+1];
+    }
+    long i = n;
+    long j = n2-1;
+    long k = fin;
+    long long total = 0;
+    while (i > -1 || j >-1) {
+        if (i > -1 && j >-1) {
+            if (izq[i] < der[j]) {
+                arreglo[k--] = der[j--];
+            } else {
+                total += j+1;
+                arreglo[k--] = izq[i--];
+            }
+        } else if (i > -1) {
+            arreglo[k--] = izq[i--];
+        } else {
+            arreglo[k--] = der[j--];
+        }
+    }
+    return total;
 }
