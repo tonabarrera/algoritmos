@@ -40,7 +40,8 @@ int LCS(char *cadena1, char *cadena2) {
         anterior = !anterior;
     }
 
-    return max_numeros(tabla[actual][longitud2], tabla[actual][longitud2-1], tabla[anterior][longitud2], tabla[anterior][longitud2-1]);
+    return tabla[anterior][longitud2];
+    //return max_numeros(tabla[actual][longitud2], tabla[actual][longitud2-1], tabla[anterior][longitud2], tabla[anterior][longitud2-1]);
 }
 
 int max_numeros(int a, int b, int c, int d) {
