@@ -1,5 +1,5 @@
 #include <iostream>
-#include <sstream>
+#include <stdlib.h>
 using namespace std;
 
 int minimo(int, int);
@@ -7,11 +7,7 @@ int minimo_quimico(int, int, int **, int **);
 int fila;
 int col;
 int main(int argc, char const *argv[]) {
-    string str;
-    getline(cin, str);
-    stringstream is(str);
-    is >> fila;
-    is >> col;
+    cin >> fila >> col;
 
     int **quimicos = (int**) malloc(fila * sizeof(int*));
     int **tabla = (int**) malloc(fila * sizeof(int*));
@@ -20,18 +16,20 @@ int main(int argc, char const *argv[]) {
         tabla[i] = (int*) malloc(col * sizeof(int));            
     }
 
-    for (int i = 0; i < fila; i++){
-        string str2;
-        getline(cin, str2);
-        stringstream is(str2);
+    for (int i = 0; i < fila; i++)
         for (int j = 0; j < col; j++){
-            int k;
-            is >> k;
-            quimicos[i][j] = k;
+            cin >> quimicos[i][j];
             tabla[i][j] = -1;
         }
-    }
+
     tabla[fila-1][col-1] = quimicos[fila-1][col-1];
+
+    for (int j = col-2; j > -1; j--)
+        tabla[fila-1][j] = tabla[fila-1][j+1] + quimicos[fila-1][j];
+
+    for (int i = fila-2; i > -1; i--)
+        tabla[i][col-1] = tabla[i+1][col-1] + quimicos[i][col-1];
+
 
     cout << minimo_quimico(0, 0, quimicos, tabla);
     return 0;
