@@ -3,96 +3,70 @@
 #include <stdlib.h>
 #include <stdio.h>
 using namespace std;
-int H;
-int W;
 
-long mayor(long, long, long);
-long tomar_piedras(int, int, int **, long **);
-long obtener_max_piedras();
+int mayor(int, int, int);
+int tomar_piedras(int, int, int **, int **);
+void obtener_max_piedras();
 
 int main(int argc, char const *argv[]) {
     int T;
-    string str;
-    getline(cin, str);
-    stringstream is(str);
-    is >> T;
-    long resultados[T];
-    for (int k = 0; k < T; k++) {
-        resultados[k] = obtener_max_piedras();
+    cin >> T;
+    while (T--) {
+        obtener_max_piedras();
     }
-    for (int k = 0; k < T-1; k++)
-        printf("%ld\n", resultados[k]);
-    printf("%ld", resultados[T-1]);
     return 0;
 }
 
-long obtener_max_piedras() {
-    string str;
-    getline(cin, str);
-    stringstream is(str);
-    is >> H;
-    is >> W;
+void obtener_max_piedras() {
+    int H;
+    int W;
+
+    cin >> H >> W;
 
     int **matriz = (int**) malloc(H * sizeof(int*));
-    long **tabla = (long**) malloc(H * sizeof(long*));
+    int **tabla = (int**) malloc(2 * sizeof(int*));
+    tabla[0] = (int*) malloc(W * sizeof(int));
+    tabla[1] = (int*) malloc(W * sizeof(int));
     for (int i = 0; i < H; i++){
         matriz[i] = (int*) malloc(W * sizeof(int));
-        tabla[i] = (long*) malloc(W * sizeof(long));            
     }
 
     for (int i = 0; i < H; i++){
-        string str2;
-        getline(cin, str2);
-        stringstream iss(str2);
-        int k;
-        int j = 0;
-        while (iss >> k && j < W){
-            is >> k;
-            matriz[i][j] = k;
-            tabla[i][j] = -1;
-            j++;
-        }
-        if (j < W){
-            for (; j < W; j++) {
-                matriz[i][j] = 0;
-                tabla[i][j] = -1;
-            }
+        for (int j = 0; j < W; j++){
+            cin >> matriz[i][j];
         }
     }
+    for (int j = 0; j < W; j++)
+        tabla[0][j] = matriz[H-1][j];
 
-    long maximo = tomar_piedras(0, 0, matriz, tabla);
-    long aux = -1;
+    short actual = 1;
+    short pre = 0;
+    for (int i = H-2; i >= 0; i--) {
+        for (int j = 0; j < W; j++) {
+            if (j == 0)
+                tabla[actual][j] = mayor(tabla[pre][j], tabla[pre][j+1], -10) + matriz[i][j];
+            else if (j == W-1)
+                tabla[actual][j] = mayor(tabla[pre][j], tabla[pre][j-1], -10) + matriz[i][j];
+            else
+                tabla[actual][j] = mayor(tabla[pre][j-1], tabla[pre][j], tabla[pre][j+1]) + matriz[i][j];
+        }
+        actual = !actual;
+        pre =!pre;
+    }
+    
+    int maximo = tabla[pre][0];
+    int aux = -1;
 
-    for (int i = 1; i < W; i++) {
-        aux = tomar_piedras(0, i, matriz, tabla);
+    for (int j = 1; j < W; j++) {
+        aux = tabla[pre][j];
         if (maximo < aux)
             maximo = aux;
     }
 
-    return maximo;
+    cout << maximo << endl;
 }
 
-long tomar_piedras(int i, int j, int **matriz, long **tabla) {
-    if (tabla[i][j] != -1)
-        return tabla[i][j];
-    if (j >= W || j < 0){
-        return -10000;
-    }
-    if (i < H-1){
-        if (tabla[i][j] != -1)
-            return tabla[i][j];
-        tabla[i][j] = mayor(tomar_piedras(i+1, j-1, matriz, tabla), tomar_piedras(i+1, j, matriz, tabla), tomar_piedras(i+1, j+1, matriz, tabla)) + matriz[i][j];
-        return tabla[i][j];
-    }
-    else{
-        if (tabla[i][j] != -1)
-            return tabla[i][j];
-        tabla[i][j] = matriz[i][j];
-        return tabla[i][j];
-    }
-}
-
-long mayor(long a, long b, long c) {
+int mayor(int a, int b, int c) {
     if (a > b)
         if (a > c)
             return a;
@@ -103,3 +77,17 @@ long mayor(long a, long b, long c) {
     else
         return c;
 }
+/*
+int tomar_piedras(int i, int j, int **matriz, int **tabla) {
+    if (j >= W || j < 0){
+        return -10000;
+    }
+    if (tabla[i][j] != -1)
+            return tabla[i][j];
+    if (i < H-1){
+        tabla[i][j] = matriz[i][j] + mayor(tomar_piedras(i+1, j-1, matriz, tabla), tomar_piedras(i+1, j, matriz, tabla), tomar_piedras(i+1, j+1, matriz, tabla));
+        return tabla[i][j];
+    }
+    return matriz[i][j];
+}
+*/
