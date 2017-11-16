@@ -14,18 +14,21 @@ int main(int argc, char const *argv[]){
     cout << longitud;
     return 0;
 }
-
+// Encuentra la longitud de la secuencia comun mas larga entre dos cadenas
 int LCS(char *cadena1, char *cadena2) {
+    // Longitud de la cadena
     int longitud1 = strlen(cadena1);
     int longitud2 = strlen(cadena2);
+    // Tabla para guardar datos ya calculados
     int tabla[2][longitud2+1];
-
+    // Alternar entre las dos filas de la tabla
     int actual = 1;
     int anterior = 0;
-    for (int i = 0; i < 2; i++){
+    // Inicializamos nuestra tabla
+    for (int i = 0; i < 2; i++)
         for(int j = 0; j<=longitud2; j++)
             tabla[i][j] = 0;
-    }
+    // Implementacion bottom up
     for (int i = 1; i <= longitud1; ++i){
         for (int j = 1; j <= longitud2; j++){
             if (cadena1[i-1] == cadena2[j-1])
