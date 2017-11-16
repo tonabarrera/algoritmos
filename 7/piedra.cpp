@@ -79,7 +79,7 @@ int mayor(int a, int b, int c) {
     else
         return c;
 }
-/*
+/* metodo top down
 int tomar_piedras(int i, int j, int **matriz, int **tabla) {
     if (j >= W || j < 0){
         return -10000;
