@@ -4,7 +4,7 @@ using namespace std;
 
 int palindromo(char *, int, int, int**);
 int minimo(int, int);
-
+int tam;
 int main(int argc, char const *argv[]) {    
     // Captura del numero de casos
     int t;
@@ -13,7 +13,7 @@ int main(int argc, char const *argv[]) {
         // Captura de los datos
         char palabra[6100];
         cin >> palabra;
-        int tam = strlen(palabra);
+        tam = strlen(palabra);
         // Tabla para utilizar el modelo top down
         int **tabla = (int**) malloc(tam* sizeof(int*));
         for (int i = 0; i < tam; i++){
@@ -22,13 +22,29 @@ int main(int argc, char const *argv[]) {
                 tabla[i][j] = -1;
         }
         // Impresion del resultado
-        cout << palindromo(palabra, 0, tam-1, tabla) << endl;
+        int k = palindromo(palabra, 0, tam-1, tabla);
+
+        for (int i = 0; i < tam;  i++){
+            for (int j = 0; j < tam;  j++)
+                printf("%d ", tabla[i][j]);
+        printf("\n");
+        }
+
+        printf("%d\n", k);
+
     }
 
     return 0;
 }
 // Encuentra el numero de cambios minimos para volver una palabra palindromo
 int palindromo(char *palabra, int i, int j, int **tabla) {
+    printf("%s\n", "MATRIZ");
+    for (int k=0; k<tam; k++){
+            for(int l=0;l<tam; l++){
+                printf("%d ", tabla[k][l]);
+            }
+            printf("\n");
+    }
     // Los extremos de la palabra no coinciden
     if (i < j && (palabra[i] != palabra[j])){
         if (tabla[i][j] != -1)
