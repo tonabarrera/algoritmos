@@ -1,45 +1,38 @@
 #include <iostream>
 #include <stdio.h>
+#include <stdlib.h>
 #include <algorithm>
 
 using namespace std;
+
+
+struct Nodo {
+    unsigned long long valor;
+    unsigned long long indice;
+};
+
+bool comparacion(struct Nodo a, struct Nodo b)
+{
+    return (a.valor < b.valor);
+}
+
 int main(int argc, char const *argv[]) {
     unsigned long long N, M, K;
     cin >> N >> M >> K;
-    unsigned long long salida[K];
-    unsigned long long indices[K];
-    unsigned long long entrada[M];
+    struct Nodo *entrada = (struct Nodo*)malloc(M * sizeof(struct Nodo));
     unsigned long long tipo, A, B;
     for (unsigned long long i = 0; i < N; i++)
         cin >> tipo >> A >> B;
-    for (unsigned long long i=0; i < M; i++)
-        cin >> entrada[i];
-    unsigned long long j = 0;
-    salida[0] = entrada[0];
-    indices[0] = 1;
-    for (unsigned long long i=1; i < M; i++) {
-        if (entrada[i] >= salida[j]) {
-            printf("%llu\n", entrada[i]);
-            unsigned long long aux = salida[j];
-            unsigned long long aux2 = indices[j];
-            salida[j] = entrada[i];
-            indices[j] = i+1;
-            if (j < K) {
-                salida[++j] = aux;
-                indices[j] = aux2;
-            }
-        } else {
-            if (j < K-1) {
-                salida[++j] = entrada[i];
-                indices[j] = i+1;
-            }
-        }
+    for (unsigned long long i=0; i < M; i++){
+        cin >> entrada[i].valor;
+        entrada[i].indice = i+1;
     }
     if (K != 0){
-    sort(indices, indices+K);
-    for (unsigned long long i = 0; i < K-1; i++)
-        printf("%llu ", indices[i]);
-    printf("%llu", indices[K-1]);
+        sort(entrada, entrada+M, comparacion);
+        for (unsigned long long i = M-K; i < M-1; i++)
+            cout << entrada[i].indice << " ";
+        cout << entrada[M-1].indice; 
     }
+    
     return 0;
 }
