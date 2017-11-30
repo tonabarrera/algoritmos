@@ -29,10 +29,15 @@ int main(int argc, char const *argv[]) {
         entrada[i].indice = i+1;
     }
     if (K != 0){
+        int salida[K];
         sort(entrada, entrada+M, comparacion);
-        for (int i = M-K; i < M-1; i++)
-            cout << entrada[i].indice << ", ";
-        cout << entrada[M-1].indice; 
+        int j = 0;
+        for (int i = M-K; i < M; i++)
+            salida[j++] = entrada[i].indice;
+
+        sort(salida, salida+K);
+        for (int i = 0; i < K; i++)
+            cout << salida[i] << " ";
     }
     
     return 0;
